@@ -1,0 +1,9 @@
+Background      0
+
+Layer 1         1
+    Hill        1
+    Shade       1
+
+Layer 2         2
+    Tree1       2
+    Tree2       2

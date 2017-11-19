@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MainForm.ui.qml</file>
+        <file>MyBusyIndicator.qml</file>
+        <file>MyProgressBar.qml</file>
+        <file>DotTileGridView.qml</file>
+        <file>DotTileGridModel.qml</file>
+        <file>GridTileCanvasView.qml</file>
+        <file>GridTileCanvasTableView.qml</file>
+        <file>ObjectTreeView.qml</file>
+        <file>ObjectTreeModel.qml</file>
+        <file>ObjectTreeDelegate.qml</file>
+        <file>default.txt</file>
+        <file>TEST7B.bmp</file>
+    </qresource>
+</RCC>
