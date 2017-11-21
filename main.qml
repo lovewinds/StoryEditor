@@ -29,5 +29,14 @@ Window {
             console.log("Drag ["+index+"]")
             object_tree_view.Drag.startDrag()
         }
+
+
+        function on_clicked_plus(index) {
+            console.log("clicked plus")
+        }
+
+        function on_clicked_minus(index) {
+            console.log("clicked minus")
+        }
     }
 }

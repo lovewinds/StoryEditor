@@ -134,23 +134,6 @@ Rectangle {
             color: "#25272c"
             Layout.fillWidth: true
 
-            /*
-        Image {
-            id: image
-            x: 0
-            y: 316
-            fillMode: Image.PreserveAspectFit
-            anchors.right: parent.right
-            anchors.rightMargin: 0
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 0
-            anchors.top: parent.top
-            anchors.topMargin: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 0
-            source: "file:///Users/ariens/source/qml/test2/TEST7B.bmp"
-        }
-        */
             Rectangle {
                 id: menu_draw
                 height: 40
@@ -166,6 +149,20 @@ Rectangle {
                     anchors.right: parent.right
                     anchors.bottom: parent.bottom
                     anchors.left: parent.left
+                }
+
+                Button {
+                    id: button_col_plus
+                    x: 22
+                    y: 8
+                    text: qsTr("+")
+                }
+
+                Button {
+                    id: button_col_minus
+                    x: 113
+                    y: 8
+                    text: qsTr("-")
                 }
             }
 
@@ -240,6 +237,20 @@ Rectangle {
                 anchors.topMargin: 2
                 //color: "#fdebeb"
             }
+        }
+    }
+
+    Connections {
+        target: button_col_plus
+        onClicked: {
+            gridTileCanvasTableView.num_columns += 1
+        }
+    }
+
+    Connections {
+        target: button_col_minus
+        onClicked: {
+            gridTileCanvasTableView.num_columns -= 1
         }
     }
 }

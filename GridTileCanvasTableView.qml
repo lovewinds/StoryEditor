@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 
 ListView {
+    property int num_columns: 10
     id: listView
     anchors.fill: parent
     contentWidth: 40 //headerItem.width
@@ -31,13 +32,14 @@ ListView {
     delegate: Column {
         id: delegateItem
         property int row: index
-        property int model: rptr.model
+        property int row_model: rptr.model
         Row {
             id: test_row
             spacing: 0
             Repeater {
                 id: rptr
-                model: (20 - index*2) ? (20-index*2) : 1
+                //model: (20 - index*2) ? (20-index*2) : 1
+                model : num_columns
                 ItemDelegate {
                     property int column: index
                     text: qsTr("%1x%2").arg(delegate.row).arg(column)
