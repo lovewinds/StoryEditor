@@ -12,7 +12,11 @@ Rectangle {
     color: "#25272C"
     property alias object_tree_view: object_tree_view
     property alias gridTileCanvasTableView: gridTileCanvasTableView
-    property alias gridView: gridView
+    property alias picker_view: picker_view
+    property alias combo_tile: combo_tile
+
+    signal qmlSignal(string msg)
+    signal load_test(string path)
 
     SplitView {
         id: layout_content
@@ -153,16 +157,32 @@ Rectangle {
 
                 Button {
                     id: button_col_plus
-                    x: 22
+                    x: 550
                     y: 8
+                    width: 40
                     text: qsTr("+")
                 }
 
                 Button {
                     id: button_col_minus
-                    x: 113
+                    x: 599
                     y: 8
+                    width: 40
                     text: qsTr("-")
+                }
+
+                Button {
+                    id: button_signal_test
+                    x: 8
+                    y: 8
+                    text: qsTr("signal")
+                }
+
+                Button {
+                    id: button_signal_load
+                    x: 84
+                    y: 8
+                    text: qsTr("Load")
                 }
             }
 
@@ -199,7 +219,7 @@ Rectangle {
 
             Rectangle {
                 id: grid_menu
-                height: 20
+                height: 46
                 color: "#2e323b"
                 anchors.right: parent.right
                 anchors.rightMargin: 2
@@ -211,19 +231,38 @@ Rectangle {
                 Text {
                     id: text1
                     color: "#ffffff"
-                    text: qsTr("Grid")
+                    text: qsTr("Tile Picker")
+                    font.family: "Verdana"
                     anchors.left: parent.left
                     anchors.leftMargin: 10
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 0
                     anchors.top: parent.top
                     anchors.topMargin: 0
                     font.pixelSize: 14
                 }
+
+                ComboBox {
+                    id: combo_tile
+                    y: 32
+                    height: 22
+                    anchors.left: parent.left
+                    anchors.leftMargin: 5
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 0
+                    anchors.right: parent.right
+                    anchors.rightMargin: 5
+                    model: tilePickerListModel
+                    /*
+                    ListModel {
+                        id: combo_model
+                        ListElement { text: "Banana"; }
+                        ListElement { text: "Apple"; }
+                        ListElement { text: "Coconut"; }
+                    }*/
+                }
             }
 
-            DotTileGridView {
-                id: gridView
+            GridTilePickerView {
+                id: picker_view
                 x: 0
                 y: 526
                 boundsBehavior: Flickable.DragOverBounds
@@ -242,15 +281,25 @@ Rectangle {
 
     Connections {
         target: button_col_plus
-        onClicked: {
-            gridTileCanvasTableView.num_columns += 1
-        }
+        onClicked: gridTileCanvasTableView.num_columns += 1
     }
 
     Connections {
         target: button_col_minus
-        onClicked: {
-            gridTileCanvasTableView.num_columns -= 1
-        }
+        onClicked: gridTileCanvasTableView.num_columns -= 1
+    }
+
+    Connections {
+        target: button_signal_test
+        onClicked: qmlSignal('clicked signal!')
+    }
+
+    Connections {
+        target: button_signal_load
+        onClicked: fileOpen('test')
+    }
+
+    Connections {
+        target: combo_tile
     }
 }

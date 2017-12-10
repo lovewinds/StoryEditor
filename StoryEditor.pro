@@ -4,14 +4,17 @@ QT += qml quick
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    DotTileImageProvider.cpp \
     GridTileCanvasProvider.cpp \
     GridTileCanvasModel.cpp \
     ObjectTreeModel.cpp \
     ObjectTreeItem.cpp \
     CustomTreeData.cpp \
     external/pugixml-1.7/src/pugixml.cpp \
-    model/SEMapModel.cpp
+    GridTilePickerImageProvider.cpp \
+    GridTilePickerModel.cpp \
+    model/SEResourceModel.cpp \
+    STViewModel.cpp \
+    TilePickerListModel.cpp
 
 RESOURCES += qml.qrc
 
@@ -35,7 +38,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # Copy external resource files to output directory
 mac {
     BUNDLE = $$OUT_PWD/$$TARGET$$quote(.app)/Contents
-    QMAKE_POST_LINK += ditto \"$$PWD/sample_scene.xml\" \"$$BUNDLE/Resources/\";
+    QMAKE_POST_LINK += ditto \"$$PWD/resource/sample_scene.xml\" \"$$BUNDLE/Resources/\";
+    QMAKE_POST_LINK += ditto \"$$PWD/resource/LostGarden_Grid_BasicTile.png\" \"$$BUNDLE/Resources/\";
+    QMAKE_POST_LINK += ditto \"$$PWD/resource/JapaneseVillage.png\" \"$$BUNDLE/Resources/\";
 }
 #install_ext_resources.path = $$OUT_PWD
 #install_ext_resources.files = $$PWD/*.xml
@@ -52,7 +57,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 INCLUDEPATH += $$PWD/external/pugixml-1.7/src
 
 HEADERS += \
-    DotTileImageProvider.h \
     GridTileCanvasProvider.h \
     GridTileCanvasModel.h \
     ObjectTreeModel.h \
@@ -60,7 +64,11 @@ HEADERS += \
     CustomTreeData.h \
     external/pugixml-1.7/src/pugiconfig.hpp \
     external/pugixml-1.7/src/pugixml.hpp \
-    model/SEMapModel.h
+    GridTilePickerImageProvider.h \
+    GridTilePickerModel.h \
+    model/SEResourceModel.h \
+    STViewModel.h \
+    TilePickerListModel.h
 
 #DISTFILES += \
 #    sample_scene.xml

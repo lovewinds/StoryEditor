@@ -1,28 +1,29 @@
-#include "SEMapModel.h"
+#include "model/SEResourceModel.h"
 
 #include <sstream>
 
 #include <pugixml.hpp>
 #include <QDebug>
+#include <QList>
 #include <QCoreApplication>
 
-SEMapModel::SEMapModel()
+SEResourceModel::SEResourceModel()
 {
 }
 
 void
-SEMapModel::openMapData(std::string path)
+SEResourceModel::openResourceData(std::string path)
 {
     pugi::xml_document doc;
 
-    qDebug() << QCoreApplication::applicationDirPath();
-    qDebug() << qPrintable(path.c_str());
+//    qDebug() << QCoreApplication::applicationDirPath();
+//    qDebug() << qPrintable(path.c_str());
 
-    std::string p;
-    p += QCoreApplication::applicationDirPath().toStdString();
-    p += "/";
-    p += path.c_str();
-    qDebug() << qPrintable(p.c_str());
+//    std::string p;
+//    p += QCoreApplication::applicationDirPath().toStdString();
+//    p += "/";
+//    p += path.c_str();
+//    qDebug() << qPrintable(p.c_str());
 
     if (!doc.load_file(path.c_str())) {
     //if(!doc.load_file(pp.toLatin1().data())) {
@@ -38,23 +39,29 @@ SEMapModel::openMapData(std::string path)
         /* Prepare global image resources */
         s.str(std::string());
         s.clear();
-        s << "/SceneRoot/GlobalResources/ImageResourceGroup/ImageResource";
+        /* Select only base image for tileset */
+        s << "/SceneRoot/GlobalResources/ImageResourceGroup/ImageResource[@type='tileset']";
         std::string img_path = s.str();
         pugi::xpath_node_set sel = doc.select_nodes(img_path.c_str());
-/*
+
         for (pugi::xpath_node_set::const_iterator it = sel.begin(); it != sel.end(); ++it) {
             pugi::xpath_node node = *it;
             std::string name(node.node().attribute("name").value());
             std::string image(node.node().attribute("path").value());
             std::string width(node.node().attribute("width").value());
             std::string height(node.node().attribute("height").value());
-
+/*
             qDebug("[%s] (%sx%s) | %s",
                    name.c_str(),
                    width.c_str(), height.c_str(),
                    image.c_str());
-        }
 */
+            m_image_resources.insert( std::map<std::string, std::string>::value_type(name, makeResourcePath(image)) );
+        }
+
+//        for(auto j = m_image_resources.begin(); j != m_image_resources.end(); j++){
+//            qDebug() << "[" << j->first.c_str() << "] " << j->second.c_str();
+//        }
 
         /* Load map data */
         s.str(std::string());
@@ -91,16 +98,16 @@ SEMapModel::openMapData(std::string path)
                 }
             }
 
-            qDebug("  Raw data:");
-            int idx = 1;
-            for(auto r : m_2dMapVector){
-                std::stringstream ss;
-                for (auto c : r) {
-                    ss << c << " ";
-                }
-                qDebug("  [%d] : %s", idx, ss.str().c_str());
-                idx++;
-            }
+//            qDebug("  Raw data:");
+//            int idx = 1;
+//            for(auto r : m_2dMapVector){
+//                std::stringstream ss;
+//                for (auto c : r) {
+//                    ss << c << " ";
+//                }
+//                qDebug("  [%d] : %s", idx, ss.str().c_str());
+//                idx++;
+//            }
         }
     }
     catch (const pugi::xpath_exception& e) {
@@ -108,7 +115,7 @@ SEMapModel::openMapData(std::string path)
     }
 }
 
-std::vector<int> SEMapModel::splitStringTokens(std::string s, std::string delim)
+std::vector<int> SEResourceModel::splitStringTokens(std::string s, std::string delim)
 {
     std::string delimiter = " ";
     std::vector<int> result;
@@ -118,7 +125,8 @@ std::vector<int> SEMapModel::splitStringTokens(std::string s, std::string delim)
 
     size_t pos = 0;
     std::string token;
-    while ((pos = s.find(delimiter)) != std::string::npos) {
+    while ((pos = s.find(delimiter)) != std::string::npos)
+    {
         token = s.substr(0, pos);
 
         // Handle token
@@ -129,4 +137,37 @@ std::vector<int> SEMapModel::splitStringTokens(std::string s, std::string delim)
     }
 
     return result;
+}
+
+std::string SEResourceModel::makeResourcePath(std::string& path) const
+{
+    std::string p;
+    p += QCoreApplication::applicationDirPath().toStdString();
+    p += "/../Resources/";
+    p += path;
+
+    return p;
+}
+
+std::string SEResourceModel::getTilePath(std::string name) const
+{
+    std::string result;
+
+    auto it = m_image_resources.find(name);
+    if (it != m_image_resources.end())
+    {
+        result = it->second;
+    }
+
+    return result;
+}
+
+std::list<std::string> SEResourceModel::getTileList() const
+{
+    std::list<std::string> ls;
+
+    for (auto it = m_image_resources.begin(); it != m_image_resources.end(); ++it)
+        ls.push_back(it->first);
+
+    return ls;
 }

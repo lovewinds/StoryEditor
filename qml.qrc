@@ -4,7 +4,7 @@
         <file>MainForm.ui.qml</file>
         <file>MyBusyIndicator.qml</file>
         <file>MyProgressBar.qml</file>
-        <file>DotTileGridView.qml</file>
+        <file>GridTilePickerView.qml</file>
         <file>DotTileGridModel.qml</file>
         <file>GridTileCanvasView.qml</file>
         <file>GridTileCanvasTableView.qml</file>

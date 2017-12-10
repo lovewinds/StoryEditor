@@ -3,16 +3,20 @@
 
 #include <QQuickImageProvider>
 
-class DotTileImageProvider : public QQuickImageProvider
+class GridTilePickerImageProvider : public QQuickImageProvider
 {
 public:
-    DotTileImageProvider()
+    GridTilePickerImageProvider()
         : QQuickImageProvider(QQuickImageProvider::Pixmap)
     {
     }
 
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
-    QImage  requestImage(const QString &id, QSize *size, const QSize &requestedSize);
+
+    void setImageSource(const QString &path);
+
+protected:
+    QImage img_original;
 };
 
 #endif // DOTTILEIMAGEPROVIDER_H

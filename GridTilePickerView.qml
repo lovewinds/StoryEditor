@@ -11,17 +11,25 @@ GridView {
 
     signal activated(string msg)
 
+    /* Export functions */
+    function append()
+    {
+        view.model.value = 16
+    }
+
     flickableDirection: Flickable.VerticalFlick
-    model: DotTileGridModel {}
+    //model: DotTileGridModel {}
+    model: picker_model
     delegate: Item {
         Column {
             Rectangle {
                 id: rect
                 width: 40
                 height: 40
-                color: colorCode
-                border.color: 'red'
-                border.width: 2
+                // colorCode
+                color: 'transparent'
+                border.color: 'transparent'
+                border.width: 0
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 MouseArea {
@@ -50,6 +58,7 @@ GridView {
                     source: "image://tiles/"+index
                     width: 40
                     height: 40
+                    cache: false /* This property should be set */
                     verticalAlignment: Image.AlignTop
                     horizontalAlignment: Image.AlignLeft
                     fillMode: Image.Pad
@@ -60,7 +69,7 @@ GridView {
                     width: 40
                     height: 40
                     color: "transparent"
-                    border.color: "black"
+                    border.color: "transparent"
                     border.width: 0
                 }
 

@@ -2,12 +2,14 @@
 #include <QQmlApplicationEngine>
 #include <QQuickView>
 #include <QQmlContext>
+#include <QObject>
+#include <QQuickItem>
 
-#include "DotTileImageProvider.h"
+#include "GridTilePickerImageProvider.h"
 #include "GridTileCanvasProvider.h"
 #include "GridTileCanvasModel.h"
 #include "ObjectTreeModel.h"
-#include "model/SEMapModel.h"
+#include "STViewModel.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,9 +17,10 @@ int main(int argc, char *argv[])
     Q_INIT_RESOURCE(qml);
 
     QQmlApplicationEngine engine;
+    STViewModel myClass(engine);
 
     /* Image provider should be set before loading */
-    engine.addImageProvider(QString("tiles"), new DotTileImageProvider);
+    engine.addImageProvider(QString("tiles"), new GridTilePickerImageProvider);
     engine.addImageProvider(QString("canvas_tiles"), new GridTileCanvasProvider);
 
     /* Read data from file */
@@ -33,6 +36,7 @@ int main(int argc, char *argv[])
     QQuickView view(&engine, NULL);
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     QQmlContext *context = view.rootContext();
+    myClass.setContext(context);
     context->setContextProperty("gridTileCanvasModel", &gtc_model);
     context->setContextProperty("theModel", &model);
 
@@ -40,8 +44,19 @@ int main(int argc, char *argv[])
     if (engine.rootObjects().isEmpty())
         return -1;
 
-    SEMapModel mapModel;
-    mapModel.openMapData("../Resources/sample_scene.xml");
+    /* Connect */
+    QObject *topLevel = engine.rootObjects().at(0);
+    QQuickWindow *window = qobject_cast<QQuickWindow *>(topLevel);
+    QObject *obj = window->children().at(3);
+    QObject::connect(obj, SIGNAL(fileOpen(QString)),
+                     &myClass, SLOT(onFileOpen(QString)));
+    QObject::connect(obj, SIGNAL(qmlSignal(QString)),
+                     &myClass, SLOT(cppSlot(QString)));
+    QObject::connect(obj, SIGNAL(pickerSelected(QString)),
+                     &myClass, SLOT(onPickerSelected(QString)));
+
+    QObject::connect(&myClass, SIGNAL(loadedEvent()),
+                     obj, SLOT(from_cpp()));
 
     return app.exec();
 }
