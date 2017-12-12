@@ -6,8 +6,8 @@ GridView {
     id: view
 
     /* Padding : 1 (*2) */
-    cellWidth: 40 + 2
-    cellHeight: 40 + 2
+    cellWidth: picker_model.tileWidth + 2
+    cellHeight: picker_model.tileHeight + 2
 
     signal activated(string msg)
 
@@ -24,8 +24,8 @@ GridView {
         Column {
             Rectangle {
                 id: rect
-                width: 40
-                height: 40
+                width: picker_model.tileWidth
+                height: picker_model.tileHeight
                 // colorCode
                 color: 'transparent'
                 border.color: 'transparent'
@@ -56,18 +56,22 @@ GridView {
                 Image {
                     id: img
                     source: "image://tiles/"+index
-                    width: 40
-                    height: 40
                     cache: false /* This property should be set */
                     verticalAlignment: Image.AlignTop
                     horizontalAlignment: Image.AlignLeft
                     fillMode: Image.Pad
+
+                    onSourceChanged: {
+                        view.cellWidth = picker_model.tileWidth + 2
+                        view.cellHeight = picker_model.tileHeight + 2
+                        console.log("Changed : " + width + " x " + height)
+                    }
                 }
 
                 Rectangle {
                     id: border_rect
-                    width: 40
-                    height: 40
+                    width: picker_model.tileWidth
+                    height: picker_model.tileHeight
                     color: "transparent"
                     border.color: "transparent"
                     border.width: 0

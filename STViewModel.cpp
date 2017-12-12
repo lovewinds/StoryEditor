@@ -25,6 +25,10 @@ void STViewModel::cppSlot(const QString &msg)
 void STViewModel::onFileOpen(const QString &path)
 {
     std::string _name;
+    std::string _path;
+    unsigned int width = 0;
+    unsigned int height = 0;
+    unsigned int tiles = 40;
     qDebug() << "File opened: " << path;
 
     resource_model.openResourceData("../Resources/sample_scene.xml");
@@ -40,15 +44,23 @@ void STViewModel::onFileOpen(const QString &path)
     if (context)
         context->setContextProperty("tilePickerListModel", &picker_list_model);
 
+    resource_model.getTileSize(_name, width, height);
+    qDebug("  [%d x %d]", width, height);
+
     /* Load a specific tileset */
     GridTilePickerImageProvider *picker_provider = (GridTilePickerImageProvider*)engine.imageProvider(QString("tiles"));
+    _path = resource_model.getTilePath(_name);
     /* TODO: Use 1st tileset from resource */
-    qDebug() << "  Tile path: " << resource_model.getTilePath(_name).c_str();
-    picker_provider->setImageSource(QString::fromStdString(resource_model.getTilePath(_name)));
+    qDebug() << "  Tile path: " << _path.c_str();
+    picker_provider->setTileSource(QString::fromStdString(_path));
+    picker_provider->setTileSize(width, height);
+    tiles = picker_provider->tileCount();
 
     /* TODO: Set valid number of tilesets */
     picker_model.clearTile();
-    picker_model.setValue(40);
+    picker_model.setValue(tiles);
+    picker_model.setTileWidth(width);
+    picker_model.setTileHeight(height);
 
     /* Notify loading finished event */
     loadedEvent();
@@ -56,16 +68,27 @@ void STViewModel::onFileOpen(const QString &path)
 
 void STViewModel::onPickerSelected(const QString &name)
 {
-    static int val = 40;
-    std::string path = name.toUtf8().constData();
+    unsigned int width = 0;
+    unsigned int height = 0;
+    unsigned int tiles = 40;
+    std::string _name = name.toUtf8().constData();
+    std::string _path = resource_model.getTilePath(_name);
+    QString path = QString::fromStdString(_path);
+
     /* Load a specific tileset */
+    resource_model.getTileSize(_name, width, height);
+    qDebug("  [%d x %d]", width, height);
+
     GridTilePickerImageProvider *picker_provider = (GridTilePickerImageProvider*)engine.imageProvider(QString("tiles"));
-    picker_provider->setImageSource(QString::fromStdString(resource_model.getTilePath(path)));
+    picker_provider->setTileSource(path);
+    picker_provider->setTileSize(width, height);
+    tiles = picker_provider->tileCount();
 
     /* Tile list need to be refreshed */
     /* TODO: Set valid number of tilesets */
     picker_model.clearTile();
 
-    picker_model.setValue(val);
-    val += 1;
+    picker_model.setValue(tiles);
+    picker_model.setTileWidth(width);
+    picker_model.setTileHeight(height);
 }

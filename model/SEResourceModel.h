@@ -6,9 +6,16 @@
 #include <list>
 #include <map>
 
-class SEMapInfo
+class SETileSetInfo
 {
+public:
+    SETileSetInfo()
+        : width(0), height(0) { };
 
+    int width;
+    int height;
+    std::string name;
+    std::string path;
 };
 
 class SEResourceModel
@@ -22,6 +29,7 @@ public:
 
     std::string getTilePath(std::string name) const;
     std::list<std::string> getTileList() const;
+    void getTileSize(std::string name, unsigned int& width, unsigned int& height) const;
 
 protected:
     std::vector<std::vector<int> > m_2dMapVector;
@@ -29,7 +37,7 @@ protected:
     std::string makeResourcePath(std::string& path) const;
 
     /* Name / File Path */
-    std::map<std::string, std::string> m_image_resources;
+    std::map<std::string, SETileSetInfo> m_image_resources;
 };
 
 #endif // SEMAPMODEL_H

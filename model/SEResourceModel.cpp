@@ -50,13 +50,31 @@ SEResourceModel::openResourceData(std::string path)
             std::string image(node.node().attribute("path").value());
             std::string width(node.node().attribute("width").value());
             std::string height(node.node().attribute("height").value());
+            std::string tile_width(node.node().attribute("tile_width").value());
+            std::string tile_height(node.node().attribute("tile_height").value());
+
+            unsigned int _t_width = 40;
+            unsigned int _t_height = 40;
+            try {
+                _t_width = std::stoi(tile_width);
+                _t_height = std::stoi(tile_height);
+            }
+            catch (std::exception &e) {
+                qDebug("%s", e.what());
+                qDebug("   Invalid width/height [%s / %s]. Use default size: 40x40", width.c_str(), height.c_str());
+            }
 /*
             qDebug("[%s] (%sx%s) | %s",
                    name.c_str(),
                    width.c_str(), height.c_str(),
                    image.c_str());
 */
-            m_image_resources.insert( std::map<std::string, std::string>::value_type(name, makeResourcePath(image)) );
+            SETileSetInfo info;
+            info.width = _t_width;
+            info.height = _t_height;
+            info.name = name;
+            info.path = makeResourcePath(image);
+            m_image_resources.insert( std::map<std::string, SETileSetInfo>::value_type(name, info) );
         }
 
 //        for(auto j = m_image_resources.begin(); j != m_image_resources.end(); j++){
@@ -151,13 +169,15 @@ std::string SEResourceModel::makeResourcePath(std::string& path) const
 
 std::string SEResourceModel::getTilePath(std::string name) const
 {
+    SETileSetInfo info;
     std::string result;
 
     auto it = m_image_resources.find(name);
     if (it != m_image_resources.end())
     {
-        result = it->second;
+        info = it->second;
     }
+    result = info.path;
 
     return result;
 }
@@ -170,4 +190,21 @@ std::list<std::string> SEResourceModel::getTileList() const
         ls.push_back(it->first);
 
     return ls;
+}
+
+void SEResourceModel::getTileSize(std::string name, unsigned int& width, unsigned int& height) const
+{
+    SETileSetInfo info;
+
+    auto it = m_image_resources.find(name);
+    if (it != m_image_resources.end())
+    {
+        info = it->second;
+    }
+
+    if (info.width > 0 && info.height > 0)
+    {
+        width = info.width;
+        height = info.height;
+    }
 }

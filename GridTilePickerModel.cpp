@@ -44,8 +44,29 @@ void DotTile::setColor(const QColor &color)
  *****************************************************************************/
 
 GridTilePickerModel::GridTilePickerModel(QObject *parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent),
+      m_tile_width(40), m_tile_height(40)
 {
+}
+
+unsigned int GridTilePickerModel::tileWidth() const
+{
+    return m_tile_width;
+}
+
+unsigned int GridTilePickerModel::tileHeight() const
+{
+    return m_tile_height;
+}
+
+void GridTilePickerModel::setTileWidth(unsigned int width)
+{
+    m_tile_width = width;
+}
+
+void GridTilePickerModel::setTileHeight(unsigned int height)
+{
+    m_tile_height = height;
 }
 
 bool GridTilePickerModel::insertRows(int row, int count, const QModelIndex &parent)

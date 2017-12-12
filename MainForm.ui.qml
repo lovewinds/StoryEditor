@@ -157,32 +157,38 @@ Rectangle {
 
                 Button {
                     id: button_col_plus
-                    x: 550
+                    x: 427
                     y: 8
                     width: 40
                     text: qsTr("+")
+                    anchors.right: button_col_minus.left
+                    anchors.rightMargin: 10
                 }
 
                 Button {
                     id: button_col_minus
-                    x: 599
+                    x: 527
                     y: 8
                     width: 40
                     text: qsTr("-")
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10
                 }
 
                 Button {
                     id: button_signal_test
-                    x: 8
                     y: 8
                     text: qsTr("signal")
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
                 }
 
                 Button {
                     id: button_signal_load
-                    x: 84
                     y: 8
                     text: qsTr("Load")
+                    anchors.left: button_signal_test.right
+                    anchors.leftMargin: 10
                 }
             }
 
@@ -213,7 +219,7 @@ Rectangle {
 
         Rectangle {
             id: region_grid
-            width: 174
+            width: 260
             Layout.minimumWidth: 100
             color: "#25272c"
 

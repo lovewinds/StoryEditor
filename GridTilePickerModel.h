@@ -36,6 +36,8 @@ class GridTilePickerModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(int value READ value WRITE setValue)
+    Q_PROPERTY(unsigned int tileWidth READ tileWidth WRITE setTileWidth NOTIFY tileSizeChanged)
+    Q_PROPERTY(unsigned int tileHeight READ tileHeight WRITE setTileHeight NOTIFY tileSizeChanged)
 
 public:
     enum GridTileRoles {
@@ -50,6 +52,10 @@ public:
     void addTile();
     void clearTile();
     void removeTile();
+    unsigned int tileWidth() const;
+    unsigned int tileHeight() const;
+    void setTileWidth(unsigned int width);
+    void setTileHeight(unsigned int height);
 
     int value() const;
     void setValue(const int &value);
@@ -63,12 +69,18 @@ public:
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
+signals:
+    void tileSizeChanged();
+
 protected:
     QHash<int, QByteArray> roleNames() const override;
 
 private:
     QList<DotTile> m_tiles;
     int m_value;
+
+    unsigned int m_tile_width;
+    unsigned int m_tile_height;
 };
 
 #endif // DOTTILEIMAGEMODEL_H
