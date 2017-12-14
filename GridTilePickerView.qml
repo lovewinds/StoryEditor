@@ -4,7 +4,6 @@ import QtQuick.Window 2.2
 
 GridView {
     id: view
-
     /* Padding : 1 (*2) */
     cellWidth: picker_model.tileWidth + 2
     cellHeight: picker_model.tileHeight + 2
@@ -64,7 +63,6 @@ GridView {
                     onSourceChanged: {
                         view.cellWidth = picker_model.tileWidth + 2
                         view.cellHeight = picker_model.tileHeight + 2
-                        console.log("Changed : " + width + " x " + height)
                     }
                 }
 
@@ -134,4 +132,13 @@ GridView {
         anchors.fill: parent
         onClicked: view.currentIndex = -1
     }
+
+//    Connections {
+//        target: picker_model
+//        onTileCountChanged: {
+//            console.log('Picker model changed !')
+//            console.log(parent.width)
+//        }
+//    }
+
 }

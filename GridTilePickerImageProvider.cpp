@@ -1,21 +1,44 @@
 #include "GridTilePickerImageProvider.h"
 #include <QDebug>
 
-void GridTilePickerImageProvider::setTileSource(const QString &path)
+void GridTilePickerImageProvider::setTileSource(const QString &path, const unsigned int& width, const unsigned int& height)
 {
     img_original.detach();
     if (false == img_original.load(path))
         qDebug() << "Failed to load image: " << path;
     else
     {
+        if (width > 0)
+            tile_width = width;
+        if (height > 0)
+            tile_height = height;
+
+        int row_count = (int)(img_original.width() / tile_width);
+        int col_count = (int)(img_original.height() / tile_height);
+        tile_count = row_count * col_count;
+
         qDebug() << "Successfully set : " << path;
         qDebug("  Size : [%d x %d]", img_original.width(), img_original.height());
+        qDebug("  Rows [%d], Cols [%d] | Total [%d]", row_count, col_count, tile_count);
+
+        horizontal_tile_count = row_count;
+        vertical_tile_count = col_count;
     }
 }
 
 unsigned int GridTilePickerImageProvider::tileCount() const
 {
     return tile_count;
+}
+
+unsigned int GridTilePickerImageProvider::verticalTileCount() const
+{
+    return vertical_tile_count;
+}
+
+unsigned int GridTilePickerImageProvider::horizontalTileCount() const
+{
+    return horizontal_tile_count;
 }
 
 QPixmap GridTilePickerImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
@@ -49,18 +72,4 @@ QPixmap GridTilePickerImageProvider::requestPixmap(const QString &id, QSize *siz
 //    qDebug("         Rows [%d], Cols [%d]", row_count, col_count);
 
     return pixmap;
-}
-
-void GridTilePickerImageProvider::setTileSize(const unsigned int& width, const unsigned int& height)
-{
-    if (width > 0)
-        tile_width = width;
-    if (height > 0)
-        tile_height = height;
-
-    int row_count = (int)(img_original.width() / tile_width);
-    int col_count = (int)(img_original.height() / tile_height);
-
-    tile_count = row_count * col_count;
-    qDebug("     Rows [%d], Cols [%d] | Total [%d]", row_count, col_count, tile_count);
 }

@@ -13,6 +13,8 @@ STViewModel::STViewModel(QQmlApplicationEngine& app_engine)
 void STViewModel::setContext(QQmlContext *context)
 {
     this->context = context;
+    if (context)
+        context->setContextProperty("tilePickerListModel", &picker_list_model);
 }
 
 void STViewModel::cppSlot(const QString &msg)
@@ -28,6 +30,8 @@ void STViewModel::onFileOpen(const QString &path)
     std::string _path;
     unsigned int width = 0;
     unsigned int height = 0;
+    unsigned int vc = 0;
+    unsigned int hc = 0;
     unsigned int tiles = 40;
     qDebug() << "File opened: " << path;
 
@@ -52,15 +56,21 @@ void STViewModel::onFileOpen(const QString &path)
     _path = resource_model.getTilePath(_name);
     /* TODO: Use 1st tileset from resource */
     qDebug() << "  Tile path: " << _path.c_str();
-    picker_provider->setTileSource(QString::fromStdString(_path));
-    picker_provider->setTileSize(width, height);
+    picker_provider->setTileSource(QString::fromStdString(_path), width, height);
     tiles = picker_provider->tileCount();
+    vc = picker_provider->verticalTileCount();
+    hc = picker_provider->horizontalTileCount();
 
     /* TODO: Set valid number of tilesets */
     picker_model.clearTile();
-    picker_model.setValue(tiles);
     picker_model.setTileWidth(width);
     picker_model.setTileHeight(height);
+    picker_model.setVerticalTileCount(vc);
+    picker_model.setHorizontalTileCount(hc);
+
+    /* TODO: setValue should be called in final step as it makes signal.
+     * Should be considered in a valid way */
+    picker_model.setValue(tiles);
 
     /* Notify loading finished event */
     loadedEvent();
@@ -71,6 +81,8 @@ void STViewModel::onPickerSelected(const QString &name)
     unsigned int width = 0;
     unsigned int height = 0;
     unsigned int tiles = 40;
+    unsigned int vc = 0;
+    unsigned int hc = 0;
     std::string _name = name.toUtf8().constData();
     std::string _path = resource_model.getTilePath(_name);
     QString path = QString::fromStdString(_path);
@@ -80,15 +92,21 @@ void STViewModel::onPickerSelected(const QString &name)
     qDebug("  [%d x %d]", width, height);
 
     GridTilePickerImageProvider *picker_provider = (GridTilePickerImageProvider*)engine.imageProvider(QString("tiles"));
-    picker_provider->setTileSource(path);
-    picker_provider->setTileSize(width, height);
+    picker_provider->setTileSource(path, width, height);
     tiles = picker_provider->tileCount();
+    vc = picker_provider->verticalTileCount();
+    hc = picker_provider->horizontalTileCount();
 
     /* Tile list need to be refreshed */
     /* TODO: Set valid number of tilesets */
     picker_model.clearTile();
 
-    picker_model.setValue(tiles);
     picker_model.setTileWidth(width);
     picker_model.setTileHeight(height);
+    picker_model.setVerticalTileCount(vc);
+    picker_model.setHorizontalTileCount(hc);
+
+    /* TODO: setValue should be called in final step as it makes signal.
+     * Should be considered in a valid way */
+    picker_model.setValue(tiles);
 }

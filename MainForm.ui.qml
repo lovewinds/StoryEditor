@@ -14,6 +14,7 @@ Rectangle {
     property alias gridTileCanvasTableView: gridTileCanvasTableView
     property alias picker_view: picker_view
     property alias combo_tile: combo_tile
+    property alias region_grid: region_grid
 
     signal qmlSignal(string msg)
     signal load_test(string path)

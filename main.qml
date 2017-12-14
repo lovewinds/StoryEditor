@@ -62,6 +62,8 @@ ApplicationWindow {
             object_tree_view.pressAndHold.connect(dragged)
             //qmlSignal.connect(on_win_signal)
             combo_tile.activated.connect(on_changed_picker_list)
+
+            picker_view.model.tileCountChanged.connect(onTilePickerChanged)
         }
 
         function from_cpp() {
@@ -103,6 +105,14 @@ ApplicationWindow {
             console.log(combo_tile.textAt(index))
 
             pickerSelected(combo_tile.textAt(index))
+        }
+
+        function onTilePickerChanged()
+        {
+            console.log('Picker model changed !')
+            region_grid.width = picker_view.model.horizontalTileCount * (picker_view.model.tileWidth + 2) + 6
+
+            console.log(region_grid.width)
         }
     }
 }

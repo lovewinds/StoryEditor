@@ -45,7 +45,8 @@ void DotTile::setColor(const QColor &color)
 
 GridTilePickerModel::GridTilePickerModel(QObject *parent)
     : QAbstractListModel(parent),
-      m_tile_width(40), m_tile_height(40)
+      m_tile_width(40), m_tile_height(40),
+      m_horizontal_tile_count(0), m_vertical_tile_count(0)
 {
 }
 
@@ -59,6 +60,16 @@ unsigned int GridTilePickerModel::tileHeight() const
     return m_tile_height;
 }
 
+unsigned int GridTilePickerModel::verticalTileCount() const
+{
+    return m_vertical_tile_count;
+}
+
+unsigned int GridTilePickerModel::horizontalTileCount() const
+{
+    return m_horizontal_tile_count;
+}
+
 void GridTilePickerModel::setTileWidth(unsigned int width)
 {
     m_tile_width = width;
@@ -67,6 +78,16 @@ void GridTilePickerModel::setTileWidth(unsigned int width)
 void GridTilePickerModel::setTileHeight(unsigned int height)
 {
     m_tile_height = height;
+}
+
+void GridTilePickerModel::setHorizontalTileCount(unsigned int count)
+{
+    m_horizontal_tile_count = count;
+}
+
+void GridTilePickerModel::setVerticalTileCount(unsigned int count)
+{
+    m_vertical_tile_count = count;
 }
 
 bool GridTilePickerModel::insertRows(int row, int count, const QModelIndex &parent)
@@ -126,6 +147,8 @@ void GridTilePickerModel::setValue(const int &value)
 
     for (int i = 0; i < m_value; i++)
         addTile();
+
+    tileCountChanged();
 }
 
 Qt::ItemFlags GridTilePickerModel::flags(const QModelIndex &index) const

@@ -38,6 +38,8 @@ class GridTilePickerModel : public QAbstractListModel
     Q_PROPERTY(int value READ value WRITE setValue)
     Q_PROPERTY(unsigned int tileWidth READ tileWidth WRITE setTileWidth NOTIFY tileSizeChanged)
     Q_PROPERTY(unsigned int tileHeight READ tileHeight WRITE setTileHeight NOTIFY tileSizeChanged)
+    Q_PROPERTY(unsigned int horizontalTileCount READ horizontalTileCount WRITE setHorizontalTileCount NOTIFY tileSizeChanged)
+    Q_PROPERTY(unsigned int verticalTileCount READ verticalTileCount WRITE setVerticalTileCount NOTIFY tileSizeChanged)
 
 public:
     enum GridTileRoles {
@@ -54,8 +56,12 @@ public:
     void removeTile();
     unsigned int tileWidth() const;
     unsigned int tileHeight() const;
+    unsigned int horizontalTileCount() const;
+    unsigned int verticalTileCount() const;
     void setTileWidth(unsigned int width);
     void setTileHeight(unsigned int height);
+    void setHorizontalTileCount(unsigned int count);
+    void setVerticalTileCount(unsigned int count);
 
     int value() const;
     void setValue(const int &value);
@@ -71,6 +77,7 @@ public:
 
 signals:
     void tileSizeChanged();
+    void tileCountChanged();
 
 protected:
     QHash<int, QByteArray> roleNames() const override;
@@ -81,6 +88,8 @@ private:
 
     unsigned int m_tile_width;
     unsigned int m_tile_height;
+    unsigned int m_horizontal_tile_count;
+    unsigned int m_vertical_tile_count;
 };
 
 #endif // DOTTILEIMAGEMODEL_H
