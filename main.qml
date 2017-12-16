@@ -33,10 +33,11 @@ ApplicationWindow {
         visible: false
         nameFilters: [ "XML project file (*.xml)", "All file (*)" ]
         onAccepted: {
-            // Notify file opened
-            main_form.fileOpen(fileDialog.fileUrls)
+            /* Cache option should be turned off. Otherwise, it won't be updated */
+            main_form.gridTileCanvasTableView.is_cached = false
 
-            main_form.gridview_sync()
+            // Notice file opened
+            main_form.fileOpen(fileDialog.fileUrls)
         }
         onRejected: {
             console.log("Canceled")
@@ -66,12 +67,10 @@ ApplicationWindow {
             picker_view.model.tileCountChanged.connect(onTilePickerChanged)
         }
 
-        function from_cpp() {
+        function on_load_finished() {
             console.log("Loading finished !")
-        }
-
-        function gridview_sync() {
-            //picker_view.append()
+            /* Turn cache option on Canvas to enhance speed of dynamic canvas resize */
+            main_form.gridTileCanvasTableView.is_cached = true
         }
 
         function test(msg) {
@@ -111,8 +110,6 @@ ApplicationWindow {
         {
             console.log('Picker model changed !')
             region_grid.width = picker_view.model.horizontalTileCount * (picker_view.model.tileWidth + 2) + 6
-
-            console.log(region_grid.width)
         }
     }
 }

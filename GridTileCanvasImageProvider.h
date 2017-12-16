@@ -1,21 +1,24 @@
-#ifndef DOTTILEIMAGEPROVIDER_H
-#define DOTTILEIMAGEPROVIDER_H
+#ifndef GRIDTILECANVASPROVIDER_H
+#define GRIDTILECANVASPROVIDER_H
 
 #include <QQuickImageProvider>
+#include "model/SEMapModel.h"
 
-class GridTilePickerImageProvider : public QQuickImageProvider
+class GridTileCanvasImageProvider : public QQuickImageProvider
 {
 public:
-    GridTilePickerImageProvider()
+    GridTileCanvasImageProvider()
         : QQuickImageProvider(QQuickImageProvider::Pixmap),
           tile_width(40), tile_height(40),
-          vertical_tile_count(0), horizontal_tile_count(0)
+          vertical_tile_count(0), horizontal_tile_count(0),
+          model(NULL)
     {
     }
 
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 
     void setTileSource(const QString &path, const unsigned int& width, const unsigned int& height);
+    void setModel(SEMapModel* model);
 
     unsigned int tileCount() const;
     unsigned int verticalTileCount() const;
@@ -28,8 +31,9 @@ protected:
 
     unsigned int vertical_tile_count;
     unsigned int horizontal_tile_count;
-
     unsigned int tile_count;
+
+    SEMapModel* model;
 };
 
-#endif // DOTTILEIMAGEPROVIDER_H
+#endif // GRIDTILECANVASPROVIDER_H

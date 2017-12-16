@@ -7,12 +7,11 @@
 #include <QList>
 #include <QCoreApplication>
 
-SEResourceModel::SEResourceModel()
+SEResourceModel::SEResourceModel() : mapModel()
 {
 }
 
-void
-SEResourceModel::openResourceData(std::string path)
+void SEResourceModel::openResourceData(std::string path)
 {
     pugi::xml_document doc;
 
@@ -91,10 +90,14 @@ SEResourceModel::openResourceData(std::string path)
             pugi::xpath_node node = *it;
             std::string name(node.node().attribute("name").value());
             std::string level(node.node().attribute("level").value());
+            std::string source(node.parent().attribute("source").value());
+            unsigned int _level = 0;
+            if (level.length() > 0)
+                _level = std::stoi(level);
+            if (_level != 1) continue;
 
-            qDebug("  Layer [%s] (%s)",
-                   name.c_str(), level.c_str());
-
+            qDebug("  [%s] -> Layer [%s] (%s)",
+                   source.c_str(), name.c_str(), level.c_str());
             for (auto raw_array : node.node().children())
             {
                 std::string pcdata(raw_array.text().get());
@@ -114,6 +117,7 @@ SEResourceModel::openResourceData(std::string path)
                     auto a = splitStringTokens(item);
                     m_2dMapVector.push_back(a);
                 }
+                mapModel.loadMap(source, m_2dMapVector);
             }
 
 //            qDebug("  Raw data:");
@@ -207,4 +211,9 @@ void SEResourceModel::getTileSize(std::string name, unsigned int& width, unsigne
         width = info.width;
         height = info.height;
     }
+}
+
+SEMapModel& SEResourceModel::getMapModel()
+{
+    return mapModel;
 }

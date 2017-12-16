@@ -6,7 +6,7 @@
 #include <QQuickItem>
 
 #include "GridTilePickerImageProvider.h"
-#include "GridTileCanvasProvider.h"
+#include "GridTileCanvasImageProvider.h"
 #include "GridTileCanvasModel.h"
 #include "ObjectTreeModel.h"
 #include "STViewModel.h"
@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 
     /* Image provider should be set before loading */
     engine.addImageProvider(QString("tiles"), new GridTilePickerImageProvider);
-    engine.addImageProvider(QString("canvas_tiles"), new GridTileCanvasProvider);
+    engine.addImageProvider(QString("canvas_tiles"), new GridTileCanvasImageProvider);
 
     /* Read data from file */
     QFile file(":/default.txt");
@@ -29,15 +29,10 @@ int main(int argc, char *argv[])
     ObjectTreeModel model(file.readAll());
     file.close();
 
-    GridTileCanvasModel gtc_model;
-    for(int i = 0; i < 32; i++)
-        gtc_model.addTile(GridTile(i+1));
-
     QQuickView view(&engine, NULL);
     view.setResizeMode(QQuickView::SizeRootObjectToView);
     QQmlContext *context = view.rootContext();
     myClass.setContext(context);
-    context->setContextProperty("gridTileCanvasModel", &gtc_model);
     context->setContextProperty("theModel", &model);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
@@ -56,7 +51,7 @@ int main(int argc, char *argv[])
                      &myClass, SLOT(onPickerSelected(QString)));
 
     QObject::connect(&myClass, SIGNAL(loadedEvent()),
-                     obj, SLOT(from_cpp()));
+                     obj, SLOT(on_load_finished()));
 
     return app.exec();
 }

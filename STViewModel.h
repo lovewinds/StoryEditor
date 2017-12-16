@@ -7,6 +7,7 @@
 
 #include "model/SEResourceModel.h"
 #include "GridTilePickerModel.h"
+#include "GridTileCanvasModel.h"
 #include "TilePickerListModel.h"
 
 class STViewModel : public QObject
@@ -31,8 +32,13 @@ protected:
     QQmlContext *context;
 
     GridTilePickerModel picker_model;
+    GridTileCanvasModel canvas_model;
+
     SEResourceModel resource_model;
     TilePickerListModel picker_list_model;
+
+    void prepareCanvas(std::string name);
+    void prepareTilePicker(std::string name);
 
 //    QList<QString> m_tiles;
 };

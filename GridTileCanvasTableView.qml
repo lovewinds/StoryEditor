@@ -2,7 +2,9 @@ import QtQuick 2.0
 import QtQuick.Controls 2.2
 
 ListView {
-    property int num_columns: 10
+    property int num_columns: 6
+    property bool is_cached: false
+
     id: listView
     anchors.fill: parent
     contentWidth: 40 //headerItem.width
@@ -28,7 +30,8 @@ ListView {
         }
     }
 */
-    model: 100
+//    model: 2
+    model: gridTileCanvasModel
     delegate: Column {
         id: delegateItem
         property int row: index
@@ -70,6 +73,7 @@ ListView {
                         source: "image://canvas_tiles/"+column+":"+delegateItem.row
                         width: 40
                         height: 40
+                        cache: listView.is_cached /* NOTICE: This property should be turn off. Otherwise it won't updated */
                         verticalAlignment: Image.AlignTop
                         horizontalAlignment: Image.AlignLeft
                         fillMode: Image.Pad

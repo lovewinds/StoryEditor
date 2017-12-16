@@ -21,15 +21,67 @@ int GridTile::value() const
  *****************************************************************************/
 
 GridTileCanvasModel::GridTileCanvasModel(QObject *parent)
-    : QAbstractListModel(parent)
+    : QAbstractListModel(parent),
+      m_value(0)
 {
 }
 
-void GridTileCanvasModel::addTile(const GridTile& tile)
+void GridTileCanvasModel::addTile()
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    m_tiles << tile;
+    insertRow(rowCount());
     endInsertRows();
+}
+
+void GridTileCanvasModel::clearTile()
+{
+    beginResetModel();
+    removeRows(0, rowCount());
+    m_tiles.clear();
+    endResetModel();
+}
+
+void GridTileCanvasModel::removeTile()
+{
+    beginRemoveRows(QModelIndex(), rowCount() - 1, rowCount() - 1);
+    removeRows(rowCount() - 1, 1);
+    endRemoveRows();
+}
+
+int GridTileCanvasModel::value() const
+{
+    return m_value;
+}
+
+void GridTileCanvasModel::setValue(const int &value)
+{
+    m_value = value;
+
+    clearTile();
+    for (int i = 0; i < m_value; i++)
+        addTile();
+
+    tileCountChanged();
+}
+
+bool GridTileCanvasModel::insertRows(int row, int count, const QModelIndex &parent)
+{
+    Q_UNUSED(row);
+    Q_UNUSED(count);
+    Q_UNUSED(parent);
+
+    m_tiles.append(GridTile(1));
+    return true;
+}
+
+bool GridTileCanvasModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    if (rowCount() <= 0)
+        return false;
+
+    m_tiles.removeLast();
+    QAbstractListModel::removeRows(row, count, parent);
+    return true;
 }
 
 

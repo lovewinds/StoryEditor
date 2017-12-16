@@ -4,7 +4,6 @@ QT += qml quick
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    GridTileCanvasProvider.cpp \
     GridTileCanvasModel.cpp \
     ObjectTreeModel.cpp \
     ObjectTreeItem.cpp \
@@ -14,7 +13,9 @@ SOURCES += main.cpp \
     GridTilePickerModel.cpp \
     model/SEResourceModel.cpp \
     STViewModel.cpp \
-    TilePickerListModel.cpp
+    TilePickerListModel.cpp \
+    GridTileCanvasImageProvider.cpp \
+    model/SEMapModel.cpp
 
 RESOURCES += qml.qrc
 
@@ -57,7 +58,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 INCLUDEPATH += $$PWD/external/pugixml-1.7/src
 
 HEADERS += \
-    GridTileCanvasProvider.h \
     GridTileCanvasModel.h \
     ObjectTreeModel.h \
     ObjectTreeItem.h \
@@ -68,7 +68,9 @@ HEADERS += \
     GridTilePickerModel.h \
     model/SEResourceModel.h \
     STViewModel.h \
-    TilePickerListModel.h
+    TilePickerListModel.h \
+    GridTileCanvasImageProvider.h \
+    model/SEMapModel.h
 
 #DISTFILES += \
 #    sample_scene.xml

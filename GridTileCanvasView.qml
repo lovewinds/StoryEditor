@@ -51,6 +51,7 @@ GridView {
                     source: "image://canvas_tiles/"+index
                     width: 40
                     height: 40
+                    cache: false /* NOTICE: This property should be set to support update */
                     verticalAlignment: Image.AlignTop
                     horizontalAlignment: Image.AlignLeft
                     fillMode: Image.Pad

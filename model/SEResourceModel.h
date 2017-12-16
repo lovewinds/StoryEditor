@@ -1,10 +1,11 @@
-#ifndef SEMAPMODEL_H
-#define SEMAPMODEL_H
+#ifndef SERESOURCEMODEL_H
+#define SERESOURCEMODEL_H
 
 #include <string>
 #include <vector>
 #include <list>
 #include <map>
+#include "model/SEMapModel.h"
 
 class SETileSetInfo
 {
@@ -30,14 +31,18 @@ public:
     std::string getTilePath(std::string name) const;
     std::list<std::string> getTileList() const;
     void getTileSize(std::string name, unsigned int& width, unsigned int& height) const;
+    SEMapModel& getMapModel();
 
 protected:
     std::vector<std::vector<int> > m_2dMapVector;
+
     std::vector<int> splitStringTokens(std::string s, std::string delim = " ");
     std::string makeResourcePath(std::string& path) const;
 
     /* Name / File Path */
     std::map<std::string, SETileSetInfo> m_image_resources;
+
+    SEMapModel mapModel;
 };
 
-#endif // SEMAPMODEL_H
+#endif // SERESOURCEMODEL_H
