@@ -4,10 +4,16 @@ import QtQuick.Controls 2.2
 ListView {
     property int num_columns: 6
     property bool is_cached: false
+    property bool is_drawing: false
+    property int pick_tile: -1
 
     id: listView
     anchors.fill: parent
     contentWidth: 40 //headerItem.width
+
+    /* Occur when tile clicked */
+    signal activated(int x, int y)
+    signal changed(int x, int y, int value)
 
     // Disables flickering
     interactive: false
@@ -53,19 +59,44 @@ ListView {
                         id: marea
                         anchors.fill: parent
                         onClicked: {
-                            view.currentIndex = index
-                            console.log("Clicked index: ["+view.currentIndex+"]")
-                            listView.activated("["+view.currentIndex+"]")
+                            listView.currentIndex = index
+                            console.log("Clicked index: ["+listView.currentIndex+"]")
+
+                            /* Change or just notice */
+                            if (listView.pick_tile >= 0)
+                                listView.changed(column, delegateItem.row, listView.pick_tile)
+                            else
+                                listView.activated(column, delegateItem.row)
                         }
                         onHoveredChanged: {
                             //console.log("Hovered ["+index+"] " + marea.containsMouse)
                             if (marea.containsMouse) {
                                 border_rect.border.width = 2
+                                if (listView.is_drawing) {
+                                    img.source = ""
+                                    img.source = "image://canvas_tiles/0:0"
+                                    /* Refresh a hack way */
+                                    //img.source = "image://canvas_tiles/"+column+":"+delegateItem.row
+
+
+                                }
                             } else {
                                 border_rect.border.width = 0
                             }
+
+                            if (listView.is_drawing) {
+                                console.log("Dragging index: ["+listView.currentIndex+"]")
+                            }
                         }
                         hoverEnabled: true
+                        onPressed: {
+                            listView.is_drawing = true
+                            //console.log("  onPressed ["+column+":"+delegateItem.row+"] !")
+                        }
+                        onReleased: {
+                            listView.is_drawing = false
+                            //console.log("  onReleased ["+column+":"+delegateItem.row+"] !")
+                        }
                     }
 
                     Image {
@@ -73,6 +104,18 @@ ListView {
                         source: "image://canvas_tiles/"+column+":"+delegateItem.row
                         width: 40
                         height: 40
+                        cache: listView.is_cached /* NOTICE: This property should be turn off. Otherwise it won't updated */
+                        verticalAlignment: Image.AlignTop
+                        horizontalAlignment: Image.AlignLeft
+                        fillMode: Image.Pad
+                    }
+
+                    Image {
+                        id: overlay_pick_tile
+                        source: "image://tiles/"+listView.pick_tile
+                        width: 40
+                        height: 40
+                        opacity: (listView.pick_tile >= 0 && marea.containsMouse) ? 0.8 : 0
                         cache: listView.is_cached /* NOTICE: This property should be turn off. Otherwise it won't updated */
                         verticalAlignment: Image.AlignTop
                         horizontalAlignment: Image.AlignLeft
@@ -98,8 +141,8 @@ ListView {
     MouseArea {
         id: multiSelection
         anchors.fill: listView
-        acceptedButtons: Qt.LeftButton
-        //hoverEnabled: true
+        acceptedButtons: Qt.RightButton
+//        hoverEnabled: true
         onPositionChanged: {
             if(multiSelection.pressed) {
                 if(mouseX >= selectLayer.newX) {
@@ -115,6 +158,8 @@ ListView {
                     selectLayer.y = mouseY < listView.y ? listView.y : mouseY;
                     selectLayer.height = selectLayer.newY - selectLayer.y;
                 }
+
+                console.log("Draggnig index: ["+listView.currentIndex+"]")
             }
         }
 

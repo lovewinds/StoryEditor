@@ -280,7 +280,7 @@ Rectangle {
                 anchors.right: parent.right
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
-                anchors.topMargin: 2
+                anchors.topMargin: 4
                 //color: "#fdebeb"
             }
         }
@@ -304,9 +304,5 @@ Rectangle {
     Connections {
         target: button_signal_load
         onClicked: fileOpen('test')
-    }
-
-    Connections {
-        target: combo_tile
     }
 }

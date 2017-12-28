@@ -36,8 +36,9 @@ GridView {
                     anchors.fill: parent
                     onClicked: {
                         view.currentIndex = index
-                        console.log("Clicked index: ["+view.currentIndex+"]")
-                        view.activated("["+view.currentIndex+"]")
+                        //console.log("Clicked index: ["+view.currentIndex+"]")
+
+                        view.activated(view.currentIndex)
                     }
                     onHoveredChanged: {
                         //console.log("Hovered ["+index+"] " + marea.containsMouse)

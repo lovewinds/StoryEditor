@@ -1,4 +1,4 @@
-#include "CustomTreeData.h"
+#include "view/CustomTreeData.h"
 
 CustomTreeData::CustomTreeData(QObject *parent)
     : QObject(parent), myIndentation(0)

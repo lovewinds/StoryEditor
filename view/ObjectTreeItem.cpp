@@ -1,4 +1,4 @@
-#include "ObjectTreeItem.h"
+#include "view/ObjectTreeItem.h"
 
 #include <QStringList>
 

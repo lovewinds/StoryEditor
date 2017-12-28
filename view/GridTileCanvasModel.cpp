@@ -1,4 +1,4 @@
-#include "GridTileCanvasModel.h"
+#include "view/GridTileCanvasModel.h"
 
 #include <QDebug>
 
@@ -36,9 +36,11 @@ void GridTileCanvasModel::addTile()
 void GridTileCanvasModel::clearTile()
 {
     beginResetModel();
-    removeRows(0, rowCount());
+    //removeRows(0, rowCount());
     m_tiles.clear();
     endResetModel();
+
+    qDebug() << "Removed. Left: [" << m_tiles.count() << "]";
 }
 
 void GridTileCanvasModel::removeTile()

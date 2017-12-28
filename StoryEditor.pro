@@ -4,20 +4,20 @@ QT += qml quick
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    GridTileCanvasModel.cpp \
-    ObjectTreeModel.cpp \
-    ObjectTreeItem.cpp \
-    CustomTreeData.cpp \
     external/pugixml-1.7/src/pugixml.cpp \
-    GridTilePickerImageProvider.cpp \
-    GridTilePickerModel.cpp \
+    view/CustomTreeData.cpp \
+    view/GridTileCanvasModel.cpp \
+    view/GridTilePickerImageProvider.cpp \
+    view/GridTilePickerModel.cpp \
+    view/GridTileCanvasImageProvider.cpp \
+    view/ObjectTreeModel.cpp \
+    view/ObjectTreeItem.cpp \
+    view/TilePickerListModel.cpp \
+    viewmodel/STViewModel.cpp \
     model/SEResourceModel.cpp \
-    STViewModel.cpp \
-    TilePickerListModel.cpp \
-    GridTileCanvasImageProvider.cpp \
     model/SEMapModel.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += qml/qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -58,18 +58,18 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 INCLUDEPATH += $$PWD/external/pugixml-1.7/src
 
 HEADERS += \
-    GridTileCanvasModel.h \
-    ObjectTreeModel.h \
-    ObjectTreeItem.h \
-    CustomTreeData.h \
     external/pugixml-1.7/src/pugiconfig.hpp \
     external/pugixml-1.7/src/pugixml.hpp \
-    GridTilePickerImageProvider.h \
-    GridTilePickerModel.h \
+    view/CustomTreeData.h \
+    view/ObjectTreeModel.h \
+    view/ObjectTreeItem.h \
+    view/GridTileCanvasModel.h \
+    view/GridTilePickerImageProvider.h \
+    view/GridTilePickerModel.h \
+    view/GridTileCanvasImageProvider.h \
+    view/TilePickerListModel.h \
+    viewmodel/STViewModel.h \
     model/SEResourceModel.h \
-    STViewModel.h \
-    TilePickerListModel.h \
-    GridTileCanvasImageProvider.h \
     model/SEMapModel.h
 
 #DISTFILES += \

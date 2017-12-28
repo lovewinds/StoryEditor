@@ -1,4 +1,4 @@
-#include "TilePickerListModel.h"
+#include "view/TilePickerListModel.h"
 
 TilePickerListModel::TilePickerListModel(QObject *parent)
     : QAbstractListModel(parent)

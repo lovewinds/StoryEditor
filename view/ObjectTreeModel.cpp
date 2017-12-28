@@ -1,7 +1,7 @@
-#include "ObjectTreeModel.h"
-#include "ObjectTreeItem.h"
+#include "view/ObjectTreeModel.h"
+#include "view/ObjectTreeItem.h"
 
-#include "CustomTreeData.h"
+#include "view/CustomTreeData.h"
 
 #include <QStringList>
 

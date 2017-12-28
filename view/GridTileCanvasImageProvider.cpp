@@ -1,4 +1,4 @@
-#include "GridTileCanvasImageProvider.h"
+#include "view/GridTileCanvasImageProvider.h"
 #include <QDebug>
 
 void GridTileCanvasImageProvider::setTileSource(const QString &path, const unsigned int& width, const unsigned int& height)

@@ -1,4 +1,4 @@
-#include "GridTilePickerImageProvider.h"
+#include "view/GridTilePickerImageProvider.h"
 #include <QDebug>
 
 void GridTilePickerImageProvider::setTileSource(const QString &path, const unsigned int& width, const unsigned int& height)

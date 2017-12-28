@@ -1,15 +1,38 @@
-#include "STViewModel.h"
-#include "GridTilePickerImageProvider.h"
-#include "GridTileCanvasImageProvider.h"
+#include "viewmodel/STViewModel.h"
+#include "view/GridTilePickerImageProvider.h"
+#include "view/GridTileCanvasImageProvider.h"
 
 #include <QQmlContext>
 #include <QDebug>
 
 STViewModel::STViewModel(QQmlApplicationEngine& app_engine)
-    : engine(app_engine), context(NULL)
+    : engine(app_engine), context(NULL), m_pickTileIdx(0)
 {
     engine.rootContext()->setContextProperty("picker_model", &picker_model);
     engine.rootContext()->setContextProperty("gridTileCanvasModel", &canvas_model);
+}
+
+QSize STViewModel::mapSize() const
+{
+    return m_mapSize;
+}
+
+void STViewModel::setMapSize(const QSize size)
+{
+    m_mapSize = size;
+}
+
+int STViewModel::pickTile() const
+{
+    return m_pickTileIdx;
+}
+
+void STViewModel::setPickTile(const int tile_idx)
+{
+    m_pickTileIdx = tile_idx;
+
+    pickTileChanged(m_pickTileIdx);
+    qDebug() << "Set Pick tile : " << m_pickTileIdx;
 }
 
 void STViewModel::setContext(QQmlContext *context)
@@ -23,7 +46,26 @@ void STViewModel::cppSlot(const QString &msg)
 {
     qDebug() << "Called the C++ slot with message:" << msg;
 
-    picker_model.clearTile();
+    // Clear tiles on TilePicker
+    //picker_model.clearTile();
+
+    // Clear tiles on Canvas
+    //canvas_model.clearTile();
+}
+
+void STViewModel::onCanvasChanged(const int x, const int y, const int value)
+{
+    unsigned int tiles = 0;
+    SEMapModel& map_model = resource_model.getMapModel();
+    map_model.setTile(x, y, value);
+
+    /* Refresh model data */
+    tiles = canvas_model.value();
+
+    canvas_model.clearTile();
+    qDebug() << "Canvas changed";
+
+    canvas_model.setValue(2);
 }
 
 void STViewModel::prepareCanvas(std::string _name)
@@ -38,12 +80,17 @@ void STViewModel::prepareCanvas(std::string _name)
 
     resource_model.getTileSize(_name, width, height);
     canvas_provider->setTileSource(QString::fromStdString(_path), width, height);
-    canvas_provider->setModel(&(resource_model.getMapModel()));
+    SEMapModel& model = resource_model.getMapModel();
+    canvas_provider->setModel(&model);
+    width = model.getWidth();
+    height = model.getHeight();
 
     /* TODO: Update tile numbers and data */
     canvas_model.clearTile();
     canvas_model.setValue(8);
-    qDebug() << "Canvas updated !";
+    qDebug() << "Canvas updated ! [" << width << "x" << height << "]";
+
+    canvasResized((int)width, (int)height);
 }
 
 void STViewModel::prepareTilePicker(std::string _name)

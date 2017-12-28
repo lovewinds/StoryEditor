@@ -54,17 +54,33 @@ ApplicationWindow {
         //signal qmlSignal(string msg)
         signal fileOpen(string path)
         signal pickerSelected(string name)
+        signal canvasTileSet(int x, int y, int value)
 
         Component.onCompleted: {
             /* Propagate signals */
             console.log("MainForm completed. connecting signals...")
 
-            picker_view.activated.connect(test)
-            object_tree_view.pressAndHold.connect(dragged)
-            //qmlSignal.connect(on_win_signal)
+            // Picker
+            picker_view.activated.connect(on_tile_item_selected)
+            picker_view.model.tileCountChanged.connect(onTilePickerChanged)
             combo_tile.activated.connect(on_changed_picker_list)
 
-            picker_view.model.tileCountChanged.connect(onTilePickerChanged)
+            // Canvas
+            gridTileCanvasTableView.activated.connect(onCanvasActivated)
+            gridTileCanvasTableView.changed.connect(onCanvasChanged)
+
+            // Object Tree
+            object_tree_view.pressAndHold.connect(dragged)
+            //qmlSignal.connect(on_win_signal)
+
+            // View model
+            fileOpen.connect(viewModel.onFileOpen)
+            qmlSignal.connect(viewModel.cppSlot)
+            pickerSelected.connect(viewModel.onPickerSelected)
+            canvasTileSet.connect(viewModel.onCanvasChanged)
+
+            viewModel.canvasResized.connect(onCanvasResized)
+            viewModel.loadedEvent.connect(on_load_finished)
         }
 
         function on_load_finished() {
@@ -73,14 +89,10 @@ ApplicationWindow {
             main_form.gridTileCanvasTableView.is_cached = true
         }
 
-        function test(msg) {
-            console.log(msg)
-
-            // Adjust row
-            gridTileCanvasTableView.model = 10;
-
-            console.log("=== delegate ===")
-            console.log(gridTileCanvasTableView.delegate.index)
+        function on_tile_item_selected(index) {
+            console.log("  [Picker] item {"+index+"} selected")
+            viewModel.pickTile = index
+            gridTileCanvasTableView.pick_tile = index
         }
 
         function dragged(index) {
@@ -88,16 +100,8 @@ ApplicationWindow {
             object_tree_view.Drag.startDrag()
         }
 
-        function on_clicked_plus(index) {
-            console.log("clicked plus")
-        }
-
-        function on_clicked_minus(index) {
-            console.log("clicked minus")
-        }
-
-        function on_win_signal(msg) {
-            //qmlSignal(msg)
+        function on_test_signal(msg) {
+            console.log("  Canvas row count : ", gridTileCanvasTableView.model)
         }
 
         function on_changed_picker_list(index) {
@@ -108,8 +112,30 @@ ApplicationWindow {
 
         function onTilePickerChanged()
         {
-            console.log('Picker model changed !')
+            console.log('  [Picker] Model changed !')
             region_grid.width = picker_view.model.horizontalTileCount * (picker_view.model.tileWidth + 2) + 6
+        }
+
+        function onCanvasActivated(x, y)
+        {
+            console.log('  [Canvas] (', x,' x ', y, ') activated !')
+        }
+
+        function onCanvasChanged(x, y, value)
+        {
+            console.log('  [Canvas] (', x,' x ', y, ') changed into [',value,'] !')
+            main_form.gridTileCanvasTableView.is_cached = false
+            canvasTileSet(x, y, value)
+            main_form.gridTileCanvasTableView.is_cached = true
+        }
+
+        function onCanvasResized(width, height)
+        {
+            console.log('Canvas resized to [%d x %d]!', width, height)
+            gridTileCanvasTableView.model.value = height;
+            gridTileCanvasTableView.num_columns = width;
+//            console.log('Canvas resized to [%d ]!', width)
+//            console.log('Canvas Resized !')
         }
     }
 }

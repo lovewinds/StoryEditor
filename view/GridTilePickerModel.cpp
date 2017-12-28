@@ -1,4 +1,4 @@
-#include "GridTilePickerModel.h"
+#include "view/GridTilePickerModel.h"
 #include <QDebug>
 
 /*****************************************************************************
