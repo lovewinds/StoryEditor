@@ -1,4 +1,4 @@
-import QtQuick 2.6
+import QtQuick 2.7
 import QtQuick.Controls 2.1
 import QtQuick.Window 2.2
 
@@ -7,18 +7,35 @@ GridView {
     /* Padding : 1 (*2) */
     cellWidth: picker_model.tileWidth + 2
     cellHeight: picker_model.tileHeight + 2
+    flickableDirection: Flickable.VerticalFlick
+    keyNavigationEnabled: true
+    focus: true
+    highlightFollowsCurrentItem: false
 
     signal activated(string msg)
 
     /* Export functions */
-    function append()
-    {
+    function append() {
         view.model.value = 16
     }
 
-    flickableDirection: Flickable.VerticalFlick
-    //model: DotTileGridModel {}
     model: picker_model
+    highlight: Component {
+        id: highlight
+        Rectangle {
+            width: view.cellWidth; height: view.cellHeight
+            // color: "red"
+            radius: 5
+            x: (view.currentItem) ? view.currentItem.x : 0
+            y: (view.currentItem) ? view.currentItem.y : 0
+            z: 1
+            color: "transparent"
+            border.color: "red"
+            border.width: 3
+            Behavior on x { SmoothedAnimation { velocity: 2500 } }
+            Behavior on y { SmoothedAnimation { velocity: 2500 } }
+        }
+    }
     delegate: Item {
         Column {
             Rectangle {
@@ -35,9 +52,8 @@ GridView {
                     id: marea
                     anchors.fill: parent
                     onClicked: {
-                        view.currentIndex = index
                         //console.log("Clicked index: ["+view.currentIndex+"]")
-
+                        view.currentIndex = index
                         view.activated(view.currentIndex)
                     }
                     onHoveredChanged: {
@@ -71,6 +87,7 @@ GridView {
                     id: border_rect
                     width: picker_model.tileWidth
                     height: picker_model.tileHeight
+                    opacity: 0.5
                     color: "transparent"
                     border.color: "transparent"
                     border.width: 0
@@ -109,23 +126,6 @@ GridView {
             spacing: 2
         }
     }
-/*
-    highlight: Component {
-        id: highlight
-        Rectangle {
-            width: view.cellWidth; height: view.cellHeight
-            color: "red"
-            radius: 5
-            x: view.currentItem.x
-            y: view.currentItem.y
-            Behavior on x { SmoothedAnimation { velocity: 1000 } }
-            Behavior on y { SmoothedAnimation { velocity: 1000 } }
-        }
-    }
-    highlightFollowsCurrentItem: false
-*/
-    focus: true
-
     // handle clicks on empty area within the grid.
     // this adds an element below the grid items but on the grid's flickable surface
     // (so it won't have mouse events stolen by the grid)
@@ -142,4 +142,14 @@ GridView {
 //        }
 //    }
 
+    /* KeyBindings */
+    Keys.onReturnPressed: {
+        console.log("Picked index: ["+view.currentIndex+"]")
+        view.activated(view.currentIndex)
+    }
+    Keys.onEnterPressed: {
+        // On Keypad side
+        console.log("Picked index: ["+view.currentIndex+"]")
+        view.activated(view.currentIndex)
+    }
 }

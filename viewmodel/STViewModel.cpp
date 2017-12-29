@@ -32,7 +32,7 @@ void STViewModel::setPickTile(const int tile_idx)
     m_pickTileIdx = tile_idx;
 
     pickTileChanged(m_pickTileIdx);
-    qDebug() << "Set Pick tile : " << m_pickTileIdx;
+    qDebug() << "    Set Pick tile : " << m_pickTileIdx;
 }
 
 void STViewModel::setContext(QQmlContext *context)
@@ -87,7 +87,7 @@ void STViewModel::prepareCanvas(std::string _name)
     /* TODO: Update tile numbers and data */
     canvas_model.clearTile();
     canvas_model.setValue(8);
-    qDebug() << "Canvas updated ! [" << width << "x" << height << "]";
+    qDebug() << "    Canvas updated ! [" << width << "x" << height << "]";
 
     canvasResized((int)width, (int)height);
 }

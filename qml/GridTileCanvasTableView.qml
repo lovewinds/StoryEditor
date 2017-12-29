@@ -63,7 +63,7 @@ ListView {
                         anchors.fill: parent
                         onClicked: {
                             listView.currentIndex = index
-                            console.log("Clicked index: ["+listView.currentIndex+"]")
+                            // console.log("Clicked index: ["+listView.currentIndex+"]")
 
                             /* Change or just notice */
                             if (listView.pick_tile >= 0 && typeof delegateItem != "undefined" ) {
@@ -76,14 +76,10 @@ ListView {
 
                                 if (typeof delegateItem != 'undefined') {
                                     /* TODO: Below refresh logic should be handled another way */
-                                    /* Refresh a hack way */
-                                    // img.cache = false
-
+                                    /* Refresh as hack way */
                                     // img.sourceChanged()
                                     img.source = ""
                                     img.source = "image://canvas_tiles/"+_col+":"+_row
-                                    // img.source = "image://canvas_tiles/0:0"
-                                    console.log("  Refreshed")
                                 }
                             }
                             else

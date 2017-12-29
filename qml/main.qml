@@ -56,6 +56,8 @@ ApplicationWindow {
         signal pickerSelected(string name)
         signal canvasTileSet(int x, int y, int value)
 
+        property int pickedTileIndex: 0
+
         Component.onCompleted: {
             /* Propagate signals */
             console.log("MainForm completed. connecting signals...")
@@ -91,8 +93,9 @@ ApplicationWindow {
 
         function on_tile_item_selected(index) {
             console.log("  [Picker] item {"+index+"} selected")
-            viewModel.pickTile = index
-            gridTileCanvasTableView.pick_tile = index
+            pickedTileIndex = index
+            state = ""
+            state = "TilePicked"
         }
 
         function dragged(index) {
@@ -123,7 +126,7 @@ ApplicationWindow {
 
         function onCanvasChanged(x, y, value)
         {
-            console.log('  [Canvas] (', x,' x ', y, ') changed into [',value,'] !')
+            // console.log('  [Canvas] (', x,' x ', y, ') changed into [',value,'] !')
             canvasTileSet(x, y, value)
         }
 
@@ -132,6 +135,42 @@ ApplicationWindow {
             gridTileCanvasTableView.model.value = height;
             gridTileCanvasTableView.num_columns = width;
             console.log('Canvas resized to [', width, ' x ', height, ']!')
+        }
+
+        /* States */
+        states: [
+            State {
+                name: "default"
+                StateChangeScript {
+                    script: {
+                        viewModel.pickTile = -1
+                        main_form.gridTileCanvasTableView.pick_tile = -1
+                    }
+                }
+            },
+            State {
+                name: "TilePicked"
+                StateChangeScript {
+                    script: {
+                        viewModel.pickTile = main_form.pickedTileIndex
+                        main_form.gridTileCanvasTableView.pick_tile = main_form.pickedTileIndex
+                    }
+                }
+            }
+        ]
+
+        /* Key binding */
+        Keys.onPressed: {
+            if (event.key == Qt.Key_QuoteLeft) {
+                // '`'
+                if (main_form.state == 'default') {
+                    console.log("Tile mode")
+                    main_form.state = "TilePicked"
+                } else {
+                    console.log("Normal mode")
+                    main_form.state = "default"
+                }
+            }
         }
     }
 }
