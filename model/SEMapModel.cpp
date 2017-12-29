@@ -20,11 +20,11 @@ int SEMapModel::getTile(int x, int y) const
 
 void SEMapModel::setTile(const int x, const int y, const int value)
 {
-    if (m_2dMap.size() == 0)
-        if (m_2dMap[y].size() == 0)
-            m_2dMap[y][x] = value;
+    if (m_2dMap.size() == 0 || m_2dMap[y].size() == 0)
+        return;
 
-    qDebug() << "Successfully set [" << x << ", " << y << "] with : " << value;
+    m_2dMap[y][x] = value;
+    qDebug() << "    Successfully set [" << x << ", " << y << "] with : " << value;
 }
 
 std::string SEMapModel::getMapLayerName() const

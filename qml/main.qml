@@ -124,18 +124,14 @@ ApplicationWindow {
         function onCanvasChanged(x, y, value)
         {
             console.log('  [Canvas] (', x,' x ', y, ') changed into [',value,'] !')
-            main_form.gridTileCanvasTableView.is_cached = false
             canvasTileSet(x, y, value)
-            main_form.gridTileCanvasTableView.is_cached = true
         }
 
         function onCanvasResized(width, height)
         {
-            console.log('Canvas resized to [%d x %d]!', width, height)
             gridTileCanvasTableView.model.value = height;
             gridTileCanvasTableView.num_columns = width;
-//            console.log('Canvas resized to [%d ]!', width)
-//            console.log('Canvas Resized !')
+            console.log('Canvas resized to [', width, ' x ', height, ']!')
         }
     }
 }

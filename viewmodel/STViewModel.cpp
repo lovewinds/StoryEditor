@@ -55,17 +55,16 @@ void STViewModel::cppSlot(const QString &msg)
 
 void STViewModel::onCanvasChanged(const int x, const int y, const int value)
 {
-    unsigned int tiles = 0;
     SEMapModel& map_model = resource_model.getMapModel();
-    map_model.setTile(x, y, value);
 
     /* Refresh model data */
-    tiles = canvas_model.value();
+    map_model.setTile(x, y, value);
 
-    canvas_model.clearTile();
-    qDebug() << "Canvas changed";
-
-    canvas_model.setValue(2);
+    /* It seems not required */
+    // unsigned int tiles = 0;
+    // tiles = canvas_model.value();
+    // canvas_model.clearTile();
+    // canvas_model.setValue(tiles);
 }
 
 void STViewModel::prepareCanvas(std::string _name)

@@ -45,7 +45,7 @@ void DotTile::setColor(const QColor &color)
 
 GridTilePickerModel::GridTilePickerModel(QObject *parent)
     : QAbstractListModel(parent),
-      m_tile_width(40), m_tile_height(40),
+      m_tile_width(40), m_tile_height(40), m_value(0),
       m_horizontal_tile_count(0), m_vertical_tile_count(0)
 {
 }
@@ -90,28 +90,6 @@ void GridTilePickerModel::setVerticalTileCount(unsigned int count)
     m_vertical_tile_count = count;
 }
 
-bool GridTilePickerModel::insertRows(int row, int count, const QModelIndex &parent)
-{
-    Q_UNUSED(row);
-    Q_UNUSED(count);
-    Q_UNUSED(parent);
-
-    m_tiles.append(DotTile(1));
-    return true;
-}
-
-bool GridTilePickerModel::removeRows(int row, int count, const QModelIndex &parent)
-{
-    if (rowCount() <= 0)
-        return false;
-
-    m_tiles.removeLast();
-
-    QAbstractListModel::removeRows(row, count, parent);
-
-    return true;
-}
-
 void GridTilePickerModel::addTile()
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
@@ -144,11 +122,31 @@ void GridTilePickerModel::setValue(const int &value)
     m_value = value;
 
     clearTile();
-
     for (int i = 0; i < m_value; i++)
         addTile();
 
     tileCountChanged();
+}
+
+bool GridTilePickerModel::insertRows(int row, int count, const QModelIndex &parent)
+{
+    Q_UNUSED(row);
+    Q_UNUSED(count);
+    Q_UNUSED(parent);
+
+    m_tiles.append(DotTile(1));
+    return true;
+}
+
+bool GridTilePickerModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    if (rowCount() <= 0)
+        return false;
+
+    m_tiles.removeLast();
+    QAbstractListModel::removeRows(row, count, parent);
+
+    return true;
 }
 
 Qt::ItemFlags GridTilePickerModel::flags(const QModelIndex &index) const

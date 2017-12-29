@@ -56,6 +56,9 @@ ListView {
                     //width: listView.headerItem.itemAt(column).width
 
                     MouseArea {
+                        property int _row: 0
+                        property int _col: 0
+                        property bool _cached: listView.is_cached
                         id: marea
                         anchors.fill: parent
                         onClicked: {
@@ -63,8 +66,26 @@ ListView {
                             console.log("Clicked index: ["+listView.currentIndex+"]")
 
                             /* Change or just notice */
-                            if (listView.pick_tile >= 0)
+                            if (listView.pick_tile >= 0 && typeof delegateItem != "undefined" ) {
+                                _row = delegateItem.row
+                                _col = column
+
+                                listView.is_cached = false 
                                 listView.changed(column, delegateItem.row, listView.pick_tile)
+                                listView.is_cached = _cached
+
+                                if (typeof delegateItem != 'undefined') {
+                                    /* TODO: Below refresh logic should be handled another way */
+                                    /* Refresh a hack way */
+                                    // img.cache = false
+
+                                    // img.sourceChanged()
+                                    img.source = ""
+                                    img.source = "image://canvas_tiles/"+_col+":"+_row
+                                    // img.source = "image://canvas_tiles/0:0"
+                                    console.log("  Refreshed")
+                                }
+                            }
                             else
                                 listView.activated(column, delegateItem.row)
                         }
@@ -73,12 +94,10 @@ ListView {
                             if (marea.containsMouse) {
                                 border_rect.border.width = 2
                                 if (listView.is_drawing) {
-                                    img.source = ""
-                                    img.source = "image://canvas_tiles/0:0"
+                                    // img.source = ""
+                                    // img.source = "image://canvas_tiles/0:0"
                                     /* Refresh a hack way */
-                                    //img.source = "image://canvas_tiles/"+column+":"+delegateItem.row
-
-
+                                    // img.source = "image://canvas_tiles/"+column+":"+delegateItem.row
                                 }
                             } else {
                                 border_rect.border.width = 0

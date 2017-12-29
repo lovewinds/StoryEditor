@@ -36,11 +36,9 @@ void GridTileCanvasModel::addTile()
 void GridTileCanvasModel::clearTile()
 {
     beginResetModel();
-    //removeRows(0, rowCount());
+    removeRows(0, rowCount());
     m_tiles.clear();
     endResetModel();
-
-    qDebug() << "Removed. Left: [" << m_tiles.count() << "]";
 }
 
 void GridTileCanvasModel::removeTile()
@@ -83,6 +81,7 @@ bool GridTileCanvasModel::removeRows(int row, int count, const QModelIndex &pare
 
     m_tiles.removeLast();
     QAbstractListModel::removeRows(row, count, parent);
+
     return true;
 }
 

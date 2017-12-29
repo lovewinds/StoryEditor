@@ -81,7 +81,7 @@ QPixmap GridTileCanvasImageProvider::requestPixmap(const QString &id, QSize *siz
     img_dst = img_original.copy(x * width, y * height, width, height);
     pixmap = pixmap.fromImage(img_dst);
 //  img_dst = img_org.copy(idx_row * width, idx_col * height, width, height);
-//  qDebug("  [%d, %d] : %d", idx_col, idx_row, idx);
+    qDebug("    [CanvasProvider]  [%d, %d] : %d", idx_col, idx_row, idx);
 
     return pixmap;
 }
