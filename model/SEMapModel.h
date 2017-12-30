@@ -17,6 +17,7 @@ public:
 
     std::string getMapLayerName() const;
     void loadMap(std::string layer_name, std::vector< std::vector<int> >& map);
+    std::vector< std::vector<int> > getMap(std::string layer_name);
 
 protected:
     std::string m_layerName;

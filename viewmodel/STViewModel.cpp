@@ -160,3 +160,10 @@ void STViewModel::onPickerSelected(const QString &name)
 
     prepareTilePicker(_name);
 }
+
+void STViewModel::onSave()
+{
+    qDebug() << "  Save !";
+
+    resource_model.saveCurrentMapdata();
+}

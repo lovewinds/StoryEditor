@@ -50,3 +50,8 @@ void SEMapModel::loadMap(std::string layer_name, std::vector< std::vector<int> >
     m_width = map[0].size();
     m_height = map.size();
 }
+
+std::vector< std::vector<int> > SEMapModel::getMap(std::string layer_name)
+{
+    return m_2dMap;
+}

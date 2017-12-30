@@ -33,6 +33,7 @@ signals:
     void pickTileChanged(int index);
 
 public slots:
+    void onSave();
     void cppSlot(const QString &msg);
     void onFileOpen(const QString &path);
     void onPickerSelected(const QString &name);

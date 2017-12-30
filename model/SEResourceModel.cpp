@@ -11,8 +11,110 @@ SEResourceModel::SEResourceModel() : mapModel()
 {
 }
 
+void SEResourceModel::saveCurrentMapdata()
+{
+    pugi::xml_document doc;
+
+    if (m_resource_path.length() == 0) {
+        qDebug() << "Resource file is not opened yet !";
+        return;
+    }
+
+    if (!doc.load_file(m_resource_path.c_str())) {
+    //if(!doc.load_file(pp.toLatin1().data())) {
+        qDebug() << "Failed to open xml scene file !";
+        return;
+    }
+
+    /* TODO: Foreach for all scenes */
+    try {
+        std::stringstream s;
+
+        /* Load map data */
+        s.str(std::string());
+        s.clear();
+        s << "/SceneRoot/Scene/Layer[@name='map']/TileMap/Layer";
+        std::string map_path = s.str();
+
+        pugi::xpath_node_set sel = doc.select_nodes(map_path.c_str());
+        for (pugi::xpath_node_set::const_iterator it = sel.begin(); it != sel.end(); ++it) {
+            pugi::xpath_node node = *it;
+            std::string name(node.node().attribute("name").value());
+            std::string level(node.node().attribute("level").value());
+            std::string source(node.parent().attribute("source").value());
+            unsigned int _level = 0;
+            if (level.length() > 0)
+                _level = std::stoi(level);
+            if (_level != 1) continue;
+
+            qDebug("  [%s] -> Layer [%s] (%s)",
+                   source.c_str(), name.c_str(), level.c_str());
+            for (auto raw_array : node.node().children())
+            {
+                std::string pcdata(raw_array.text().get());
+                //qDebug("   raw : %s", pcdata.c_str());
+
+                /* TODO: Current logic sets each character into grid */
+                std::vector<std::string> row_elems;
+                std::stringstream sv; // pcdata
+
+                /* Split each row */
+                m_2dMapVector.clear();
+                m_2dMapVector = mapModel.getMap(source);
+                // m_2dMapVector.clear();
+                char buf[6] = {0, };
+                for (auto line : m_2dMapVector) {
+                    // std::string _item("");
+                    for(auto v : line) {
+                        std::snprintf(buf, 6, "%04d", v);
+                        // _item.append(buf);
+                        sv << buf << " ";
+                    }
+                    sv << "\n";
+                    // _item.append("\n");
+                    // sv << _item;
+                }
+
+                // std::string item;
+                // while (std::getline(ss, item, '\n')) {
+                //     if (item.length() == 0) continue;
+                //     row_elems.push_back(item);
+
+                //     auto a = splitStringTokens(item);
+                //     m_2dMapVector.push_back(a);
+                // }
+                // mapModel.loadMap(source, m_2dMapVector); 
+                raw_array.text().set(sv.str().c_str());
+                qDebug() << "Storage :";
+                qDebug() << raw_array.text().get();
+            }
+
+            qDebug("  Saved data: ");
+            int idx = 1;
+            char buf[6];
+            for(auto r : m_2dMapVector){
+                std::stringstream ss;
+                for (auto c : r) {
+                    std::snprintf(buf, 6, "%02d", c);
+                    ss << buf << " ";
+                }
+                qDebug("  [%03d] : %s", idx, ss.str().c_str());
+                idx++;
+            }
+        }
+
+        /* Save into XML */
+        qDebug() << "Saved into : " << m_resource_path.c_str();
+        qDebug() << "    Result :" << doc.save_file(m_resource_path.c_str());
+    }
+    catch (const pugi::xpath_exception& e) {
+        qDebug() << "Failed to save map data: " << e.what();
+    }
+}
+
 void SEResourceModel::openResourceData(std::string path)
 {
+    m_resource_path = path;
     pugi::xml_document doc;
 
 //    qDebug() << QCoreApplication::applicationDirPath();

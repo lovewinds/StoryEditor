@@ -27,6 +27,7 @@ public:
     }
 
     void openResourceData(std::string path);
+    void saveCurrentMapdata();
 
     std::string getTilePath(std::string name) const;
     std::list<std::string> getTileList() const;
@@ -43,6 +44,7 @@ protected:
     std::map<std::string, SETileSetInfo> m_image_resources;
 
     SEMapModel mapModel;
+    std::string m_resource_path;
 };
 
 #endif // SERESOURCEMODEL_H

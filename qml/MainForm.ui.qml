@@ -18,6 +18,7 @@ Rectangle {
 
     signal qmlSignal(string msg)
     signal load_test(string path)
+    signal save
 
     SplitView {
         id: layout_content
@@ -191,6 +192,14 @@ Rectangle {
                     anchors.left: button_signal_test.right
                     anchors.leftMargin: 10
                 }
+
+                Button {
+                    id: button_signal_save
+                    y: 8
+                    text: qsTr("Save")
+                    anchors.left: button_signal_load.right
+                    anchors.leftMargin: 10
+                }
             }
 
             Rectangle {
@@ -304,5 +313,10 @@ Rectangle {
     Connections {
         target: button_signal_load
         onClicked: fileOpen('test')
+    }
+
+    Connections {
+        target: button_signal_save
+        onClicked: save()
     }
 }

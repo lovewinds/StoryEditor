@@ -77,6 +77,7 @@ ApplicationWindow {
 
             // View model
             fileOpen.connect(viewModel.onFileOpen)
+            save.connect(viewModel.onSave)
             qmlSignal.connect(viewModel.cppSlot)
             pickerSelected.connect(viewModel.onPickerSelected)
             canvasTileSet.connect(viewModel.onCanvasChanged)
