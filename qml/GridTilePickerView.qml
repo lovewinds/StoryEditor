@@ -134,22 +134,14 @@ GridView {
         onClicked: view.currentIndex = -1
     }
 
-//    Connections {
-//        target: picker_model
-//        onTileCountChanged: {
-//            console.log('Picker model changed !')
-//            console.log(parent.width)
-//        }
-//    }
-
     /* KeyBindings */
     Keys.onReturnPressed: {
-        console.log("Picked index: ["+view.currentIndex+"]")
+        // console.log("Picked index: ["+view.currentIndex+"]")
         view.activated(view.currentIndex)
     }
     Keys.onEnterPressed: {
         // On Keypad side
-        console.log("Picked index: ["+view.currentIndex+"]")
+        // console.log("Picked index: ["+view.currentIndex+"]")
         view.activated(view.currentIndex)
     }
 }

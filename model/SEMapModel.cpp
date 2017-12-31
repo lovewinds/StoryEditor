@@ -24,7 +24,7 @@ void SEMapModel::setTile(const int x, const int y, const int value)
         return;
 
     m_2dMap[y][x] = value;
-    qDebug() << "    Successfully set [" << x << ", " << y << "] with : " << value;
+    // qDebug() << "    Successfully set [" << x << ", " << y << "] with : " << value;
 }
 
 std::string SEMapModel::getMapLayerName() const

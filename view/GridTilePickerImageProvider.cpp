@@ -17,9 +17,9 @@ void GridTilePickerImageProvider::setTileSource(const QString &path, const unsig
         int col_count = (int)(img_original.height() / tile_height);
         tile_count = row_count * col_count;
 
-        qDebug() << "Successfully set : " << path;
-        qDebug("  Size : [%d x %d]", img_original.width(), img_original.height());
-        qDebug("  Rows [%d], Cols [%d] | Total [%d]", row_count, col_count, tile_count);
+        // qDebug() << "Successfully set : " << path;
+        // qDebug("  Size : [%d x %d]", img_original.width(), img_original.height());
+        // qDebug("  Rows [%d], Cols [%d] | Total [%d]", row_count, col_count, tile_count);
 
         horizontal_tile_count = row_count;
         vertical_tile_count = col_count;
@@ -61,7 +61,7 @@ QPixmap GridTilePickerImageProvider::requestPixmap(const QString &id, QSize *siz
                    requestedSize.height() > 0 ? requestedSize.height() : height);
 
     int row_count = (int)(img_original.width() / width);
-    int col_count = (int)(img_original.height() / height);
+    // int col_count = (int)(img_original.height() / height);
     int x = (int)(idx % row_count);
     int y = (int)(idx / row_count);
 

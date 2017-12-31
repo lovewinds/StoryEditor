@@ -61,46 +61,30 @@ void SEResourceModel::saveCurrentMapdata()
                 /* Split each row */
                 m_2dMapVector.clear();
                 m_2dMapVector = mapModel.getMap(source);
-                // m_2dMapVector.clear();
                 char buf[6] = {0, };
                 for (auto line : m_2dMapVector) {
-                    // std::string _item("");
                     for(auto v : line) {
                         std::snprintf(buf, 6, "%04d", v);
-                        // _item.append(buf);
                         sv << buf << " ";
                     }
                     sv << "\n";
-                    // _item.append("\n");
-                    // sv << _item;
                 }
 
-                // std::string item;
-                // while (std::getline(ss, item, '\n')) {
-                //     if (item.length() == 0) continue;
-                //     row_elems.push_back(item);
-
-                //     auto a = splitStringTokens(item);
-                //     m_2dMapVector.push_back(a);
-                // }
-                // mapModel.loadMap(source, m_2dMapVector); 
                 raw_array.text().set(sv.str().c_str());
-                qDebug() << "Storage :";
-                qDebug() << raw_array.text().get();
             }
 
-            qDebug("  Saved data: ");
-            int idx = 1;
-            char buf[6];
-            for(auto r : m_2dMapVector){
-                std::stringstream ss;
-                for (auto c : r) {
-                    std::snprintf(buf, 6, "%02d", c);
-                    ss << buf << " ";
-                }
-                qDebug("  [%03d] : %s", idx, ss.str().c_str());
-                idx++;
-            }
+            // qDebug("  Saved data: ");
+            // int idx = 1;
+            // char buf[6];
+            // for(auto r : m_2dMapVector){
+            //     std::stringstream ss;
+            //     for (auto c : r) {
+            //         std::snprintf(buf, 6, "%02d", c);
+            //         ss << buf << " ";
+            //     }
+            //     qDebug("  [%03d] : %s", idx, ss.str().c_str());
+            //     idx++;
+            // }
         }
 
         /* Save into XML */

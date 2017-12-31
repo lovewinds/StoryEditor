@@ -17,9 +17,9 @@ void GridTileCanvasImageProvider::setTileSource(const QString &path, const unsig
         int col_count = (int)(img_original.height() / tile_height);
         tile_count = row_count * col_count;
 
-        qDebug() << "Successfully set : " << path;
-        qDebug("  Size : [%d x %d]", img_original.width(), img_original.height());
-        qDebug("  Rows [%d], Cols [%d] | Total [%d]", row_count, col_count, tile_count);
+        // qDebug() << "Successfully set : " << path;
+        // qDebug("  Size : [%d x %d]", img_original.width(), img_original.height());
+        // qDebug("  Rows [%d], Cols [%d] | Total [%d]", row_count, col_count, tile_count);
 
         horizontal_tile_count = row_count;
         vertical_tile_count = col_count;
